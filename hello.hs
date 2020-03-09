@@ -1,6 +1,3 @@
-f :: Integer -> Integer
-f x = x * x
-
 add :: Integer -> Integer -> Integer
 add x y = x + y
 
@@ -9,7 +6,7 @@ mul x y = x * y
 
 summate :: [Integer] -> Integer
 summate [] = 0
-summate lst = (head lst) + summate (tail lst)
+summate lst =  add (head lst) (summate (tail lst))
 
 divisors :: Integer -> [Integer]
 divisors x = [n | n <- [1..x], (mod x n) == 0]
@@ -24,11 +21,8 @@ gcd' a b
     | otherwise = gcd' b (mod a b)
 
 coprime :: Integer -> Integer -> Bool
-coprime a b
-    | gcd' a b == 1 = True
-    | otherwise = False
+coprime a b = gcd' a b == 1
 
--- list of primes up to and including x
 primes :: Integer -> [Integer]
 primes n = [p | p <- [2..n], is_prime p]
 
@@ -39,14 +33,13 @@ primeFactors :: Integer -> [Integer]
 primeFactors n = [m | m <- divisors n, is_prime m]
 
 main = do
-    -- print (f 3)
     -- print (add 2 3)
     -- print (mul 3 8)
-    -- print (summate [1..5])
+    -- print (summate [1..9])
     -- print (is_prime 4)
     -- print (divisors 114)
     -- print (primes 113)
-    -- print (gcd' 12 4)
+    print (gcd' 12 4)
     -- print (coprime 13 14)
     -- print (totient 123)
-    print (primeFactors 128)
+    -- print (primeFactors 128)
