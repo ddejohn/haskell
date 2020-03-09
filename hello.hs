@@ -24,7 +24,7 @@ coprime :: Integer -> Integer -> Bool
 coprime a b = gcd' a b == 1
 
 primes :: Integer -> [Integer]
-primes n = [p | p <- [2..n], is_prime p]
+primes n = [p | p <- filter is_prime [2..n]]
 
 totient :: Integer -> Int
 totient m = length [r | r <- [1..m-1], coprime m r]
@@ -38,8 +38,8 @@ main = do
     -- print (sum' [1..9])
     -- print (is_prime 4)
     -- print (divisors 114)
-    -- print (primes 113)
-    print (gcd' 12 4)
+    print (primes 113)
+    -- print (gcd' 12 4)
     -- print (coprime 13 14)
-    -- print (totient 123)
+    print (totient 123)
     -- print (primeFactors 128)
