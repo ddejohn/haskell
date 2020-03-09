@@ -4,9 +4,9 @@ add x y = x + y
 mul :: Integer -> Integer -> Integer
 mul x y = x * y
 
-summate :: [Integer] -> Integer
-summate [] = 0
-summate lst =  add (head lst) (summate (tail lst))
+sum' :: [Integer] -> Integer
+sum' [] = 0
+sum' lst =  add (head lst) (sum' (tail lst))
 
 divisors :: Integer -> [Integer]
 divisors x = [n | n <- [1..x], (mod x n) == 0]
@@ -35,7 +35,7 @@ primeFactors n = [m | m <- divisors n, is_prime m]
 main = do
     -- print (add 2 3)
     -- print (mul 3 8)
-    -- print (summate [1..9])
+    -- print (sum' [1..9])
     -- print (is_prime 4)
     -- print (divisors 114)
     -- print (primes 113)
