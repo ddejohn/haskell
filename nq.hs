@@ -3,19 +3,19 @@ type Board = [Seq]
 
 
 setup :: Int -> Board
--- transpose :: Board -> Board
+transpose :: Board -> Board
 rows :: Board -> Int
 cols :: Board -> Int
 size :: Board -> Int
 
-queensRow :: Seq -> Int
+queensSeq :: Seq -> Int
 queensBoard :: Board -> Int
 
 col_val :: Seq -> Bool
 row_val :: Seq -> Bool
 
 all_rows_val :: Board -> Bool
--- all_cols_val :: Board -> Bool
+all_cols_val :: Board -> Bool
 
 -- primaryDiag :: Board -> Int -> [(Int, Int)]
 -- secondaryDiag :: Board -> Int -> [(Int, Int)]
@@ -36,21 +36,21 @@ size b
     | (cols b == rows b) = rows b
     | otherwise = 0
 
-queensRow r = sum [1 | s <- r, s == 'Q']
-queensBoard b = sum [1 | r <- b, s <- r, s == 'Q']
+queensSeq seq = sum [1 | q <- seq, q == 'Q']
+queensBoard b = sum [queensSeq r | r <- b]
 
-row_val r = queensRow r < 2
+row_val r = queensSeq r < 2
 col_val c = row_val c
 
 all_rows_val b = all (== True) [row_val r | r <- b]
--- all_cols_val b = all (== True) [col_val c | c <- ]
+all_cols_val b = all_rows_val (transpose b)
 
-main = do
-    let b = setup 4
-    print(b)
-    print(rows b)
-    print(cols b)
-    print(size b)
-    print(queensRow "--Q--Q-Q")
-    print(queensBoard ["Q---", "--Q-", "-Q-Q", "QQQQ"])
+-- main = do
+--     let b = setup 4
+--     print(b)
+--     print(rows b)
+--     print(cols b)
+--     print(size b)
+--     print(queensSeq "--Q--Q-Q")
+--     print(queensBoard ["Q---", "--Q-", "-Q-Q", "QQQQ"])
     
