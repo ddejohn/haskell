@@ -8,14 +8,14 @@ rows :: Board -> Int
 cols :: Board -> Int
 size :: Board -> Int
 
-queensSeq :: Seq -> Int
-queensBoard :: Board -> Int
+qSeq :: Seq -> Int
+qBoard :: Board -> Int
 
-col_val :: Seq -> Bool
-row_val :: Seq -> Bool
+cVal :: Seq -> Bool
+rVal :: Seq -> Bool
 
-all_rows_val :: Board -> Bool
-all_cols_val :: Board -> Bool
+allRows :: Board -> Bool
+allCols :: Board -> Bool
 
 -- primaryDiag :: Board -> Int -> [(Int, Int)]
 -- secondaryDiag :: Board -> Int -> [(Int, Int)]
@@ -30,20 +30,19 @@ rows b = length b
 cols b
     | all (== n) [length r | r <- b] = n
     | otherwise = 0
-    where n = length (head b)
-
+    where n = rows b
 size b
     | (cols b == rows b) = rows b
     | otherwise = 0
 
-queensSeq seq = sum [1 | q <- seq, q == 'Q']
-queensBoard b = sum [queensSeq r | r <- b]
+qSeq seq = sum [1 | q <- seq, q == 'Q']
+qBoard b = sum [qSeq r | r <- b]
 
-row_val r = queensSeq r < 2
-col_val c = row_val c
+rVal r = qSeq r < 2
+cVal c = rVal c
 
-all_rows_val b = all (== True) [row_val r | r <- b]
-all_cols_val b = all_rows_val (transpose b)
+allRows b = all (== True) [rVal r | r <- b]
+allCols b = allRows (transpose b)
 
 -- main = do
 --     let b = setup 4
@@ -51,6 +50,6 @@ all_cols_val b = all_rows_val (transpose b)
 --     print(rows b)
 --     print(cols b)
 --     print(size b)
---     print(queensSeq "--Q--Q-Q")
---     print(queensBoard ["Q---", "--Q-", "-Q-Q", "QQQQ"])
+--     print(qSeq "--Q--Q-Q")
+--     print(qBoard ["Q---", "--Q-", "-Q-Q", "QQQQ"])
     
