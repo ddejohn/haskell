@@ -1,4 +1,3 @@
-import Data.List
 
 type Seq = [Char]
 type Board = [Seq]
@@ -14,13 +13,14 @@ setup n
 
 -- I received help from functional programming Discord server on this IO
 -- I wrote this simply because I wanted a prettier board to print
-showBoard :: Board -> IO ()
-showBoard b = putStrLn (intercalate "\n" x)
-    where x = [intercalate "  " [[c] | c <- r] | r <- b]
+-- import Data.List
+-- showBoard :: Board -> IO ()
+-- showBoard b = putStrLn (intercalate "\n" x)
+--     where x = [intercalate "  " [[c] | c <- r] | r <- b]
 
 -- I had also written my own transpose before using import Data.List:
--- transpose :: Board -> Board
--- transpose b = [[r!!i | r <- b] | i <- [0..length b - 1]]
+transpose :: Board -> Board
+transpose b = [[r!!i | r <- b] | i <- [0..length b - 1]]
 
 rows :: Board -> Int
 rows b = length b
