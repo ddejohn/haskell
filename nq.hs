@@ -97,3 +97,6 @@ solved b = and [valid b, qBoard b == size b]
 -- selectSecondaryDiag :: Board -> Int -> IO ()
 -- selectSecondaryDiag b n = selectPrimaryDiag x n
 --     where x = reverse b
+
+
+------------------------------- BOARD GENERATOR -------------------------------
