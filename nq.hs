@@ -1,4 +1,3 @@
-
 type Seq = [Char]
 type Board = [Seq]
 type Diag = [(Int, Int)]
