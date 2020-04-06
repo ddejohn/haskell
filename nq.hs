@@ -1,3 +1,4 @@
+import Data.List
 
 type Seq = [Char]
 type Board = [Seq]
@@ -14,13 +15,13 @@ setup n
 -- I received help from functional programming Discord server on this IO
 -- I wrote this simply because I wanted a prettier board to print
 -- import Data.List
--- showBoard :: Board -> IO ()
--- showBoard b = putStrLn (intercalate "\n" x)
---     where x = [intercalate "  " [[c] | c <- r] | r <- b]
+showBoard :: Board -> IO ()
+showBoard b = putStrLn (intercalate "\n" x)
+    where x = [intercalate " " [[c] | c <- r] | r <- b] ++ ["\n"]
 
 -- I had also written my own transpose before using import Data.List:
-transpose :: Board -> Board
-transpose b = [[r!!i | r <- b] | i <- [0..length b - 1]]
+-- transpose :: Board -> Board
+-- transpose b = [[r!!i | r <- b] | i <- [0..length b - 1]]
 
 rows :: Board -> Int
 rows b = length b
@@ -89,14 +90,25 @@ valid b = and [r, c, d]
 solved :: Board -> Bool
 solved b = and [valid b, qBoard b == size b]
 
--- selectPrimaryDiag :: Board -> Int -> IO ()
--- selectPrimaryDiag b n = do
---     let p = diags b
---     putStrLn [(getBoardPos b) t | t <- p!!n]
-
--- selectSecondaryDiag :: Board -> Int -> IO ()
--- selectSecondaryDiag b n = selectPrimaryDiag x n
---     where x = reverse b
-
 
 ------------------------------- BOARD GENERATOR -------------------------------
+
+setQueenAt :: Board -> Int -> [Board]
+setQueenAt b i = do
+    let z = replicate ((size b) - 1) '-'
+    let p = nub (permutations ("Q" ++ z))
+    [ [ (b!!k) | k <- [0..(i-1)] ] ++ [r] ++ [ (b!!k) | k <- [(i+1)..((rows b) - 1)] ] | r <- p ]
+
+nextRow :: Board -> Int
+nextRow b = head [ i | i <- [0 .. (size b) - 1], qSeq (b!!i) == 0 ]
+
+solve :: Board -> [Board]
+solve b
+    | solved b = [b]
+    | otherwise = concat [ solve newB | newB <- setQueenAt b i, valid newB ]
+        where i = nextRow b
+
+main = do
+    let b = setup 6
+    let soln = [soln | soln <- solve b]
+    mapM_ (showBoard) soln
