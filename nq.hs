@@ -14,6 +14,10 @@ setup n
 
 -- I received help from functional programming Discord server on this IO
 -- I wrote this simply because I wanted a prettier board to print
+-- was told to use intercalate, which required import Data.List
+-- I did this before I realized that all of your source code was on github
+-- I didn't know I wasn't supposed to do this from scratch
+
 -- import Data.List
 showBoard :: Board -> IO ()
 showBoard b = putStrLn (intercalate "\n" x)
