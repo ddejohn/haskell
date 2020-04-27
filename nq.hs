@@ -47,14 +47,27 @@ numDiags b = 2*(size b) - 1
 getBoardPos :: Board -> (Int, Int) -> Char
 getBoardPos b t = b!!x!!y where (x,y) = t
 
-diags :: Board -> [Diag]
-diags b = [[(i+k, j+k) | k <- [0..n-(i+j)]] | [i, j] <- t]
+allMainDiagIndices :: Board -> [Diag]
+allMainDiagIndices b = [[(i+k, j+k) | k <- [0..n-(i+j)]] | [i, j] <- t]
     where n = rows b - 1
           x = [[i,0] | i <- [n, n-1..1]]
           t = x ++ [[0,0]] ++ reverse [reverse y | y <- x]
 
+allSecDiagIndices :: Board -> [Diag]
+allSecDiagIndices b = do
+    let n = length b
+    let x = [[(j, i-j) | j <- [i,i-1..0]] | i <- [0..n-1]]
+    let y = [[(j, n-1-j+k) | j <- [n-1,n-2..k]] | k <- [1..n-1]]
+    x ++ y
+
+mainDiagIndices :: Board -> Int -> Diag
+mainDiagIndices b n = (allMainDiagIndices b)!!n
+
+secDiagIndices :: Board -> Int -> Diag
+secDiagIndices b n = (allSecDiagIndices b)!!n
+
 mainDiag :: Board -> [Seq]
-mainDiag b = [map (getBoardPos b) tups | tups <- diags b]
+mainDiag b = [map (getBoardPos b) tups | tups <- allMainDiagIndices b]
 
 secDiag :: Board -> [Seq]
 secDiag b = mainDiag (reverse b)
@@ -62,37 +75,34 @@ secDiag b = mainDiag (reverse b)
 
 ------------------------------- SOLUTION CHECKS -------------------------------
 
-qSeq :: Seq -> Int
-qSeq seq = sum [1 | q <- seq, q == 'Q']
+queensSeq :: Seq -> Int
+queensSeq seq = sum [1 | q <- seq, q == 'Q']
 
-qBoard :: Board -> Int
-qBoard b = sum [qSeq r | r <- b]
+queensBoard :: Board -> Int
+queensBoard b = sum [queensSeq r | r <- b]
 
-rVal :: Seq -> Bool
-rVal r = qSeq r < 2
+seqValid :: Seq -> Bool
+seqValid r = queensSeq r < 2
 
-cVal :: Seq -> Bool
-cVal c = rVal c
+rowsValid :: Board -> Bool
+rowsValid b = and [seqValid r | r <- b]
 
-allRows :: Board -> Bool
-allRows b = and [rVal r | r <- b]
+colsValid :: Board -> Bool
+colsValid b = rowsValid (transpose b)
 
-allCols :: Board -> Bool
-allCols b = allRows (transpose b)
-
-allDiags :: Board -> Bool
-allDiags b = and [qSeq s < 2 | d <- [pri, sec],  s <- d]
+diagsValid :: Board -> Bool
+diagsValid b = and [queensSeq s < 2 | d <- [pri, sec],  s <- d]
     where pri = mainDiag b
           sec = secDiag b
 
 valid :: Board -> Bool
 valid b = and [r, c, d]
-    where r = allRows b
-          c = allCols b
-          d = allDiags b
+    where r = rowsValid b
+          c = colsValid b
+          d = diagsValid b
 
 solved :: Board -> Bool
-solved b = and [valid b, qBoard b == size b]
+solved b = and [valid b, queensBoard b == size b]
 
 
 ------------------------------- BOARD GENERATOR -------------------------------
@@ -104,7 +114,7 @@ setQueenAt b i = do
     [ [ (b!!k) | k <- [0..(i-1)] ] ++ [r] ++ [ (b!!k) | k <- [(i+1)..((rows b) - 1)] ] | r <- p ]
 
 nextRow :: Board -> Int
-nextRow b = head [ i | i <- [0 .. (size b) - 1], qSeq (b!!i) == 0 ]
+nextRow b = head [ i | i <- [0 .. (size b) - 1], queensSeq (b!!i) == 0 ]
 
 solve :: Board -> [Board]
 solve b
